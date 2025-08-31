@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Smart Lab Practical Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Full page background with smooth animated gradient */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(115deg, #2952ff 0%, #6de0ff 100%);
+      background-size: 200% 200%;
+      animation: gradientMove 8s ease-in-out infinite;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #333;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Centered registration container */
+    .register-container {
+      width: 420px;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(41, 82, 255, 0.2);
+      padding: 35px 40px;
+      animation: fadeInScale 0.7s ease forwards;
+      box-sizing: border-box;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    h2 {
+      margin: 0 0 20px 0;
+      text-align: center;
+      color: #1d3577;
+      font-weight: 700;
+      font-size: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
+    input, select {
+      padding: 12px 14px;
+      margin-top: 8px;
+      border: 1.8px solid #c2d1ff;
+      border-radius: 10px;
+      background: #f9fafb;
+      font-size: 1rem;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      border-color: #2952ff;
+      box-shadow: 0 0 8px #678cff88;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    button {
+      margin-top: 30px;
+      background: linear-gradient(45deg, #2952ff, #6de0ff);
+      color: white;
+      font-weight: 700;
+      padding: 14px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(13, 56, 255, 0.4);
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #1a3ec9, #43beff);
+      box-shadow: 0 8px 16px rgba(13, 56, 255, 0.6);
+    }
+
+    /* Initially hidden PIN container */
+    #pin-container {
+      display: none;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #555;
+    }
+
+    .footer a {
+      color: #2952ff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #1a3ec9;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>Register</h2>
+    <form action="/register" method="POST">
+      <label for="role">Role</label>
+      <select name="role" id="role" required>
+        <option value="" disabled selected>Select your role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required placeholder="Enter your name" />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your email" />
+
+      <div id="pin-container">
+        <label for="pin">PIN (Students only)</label>
+        <input type="text" name="pin" id="pin" placeholder="Enter PIN given by teacher" />
+      </div>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Create password" />
+
+      <button type="submit">Register</button>
+    </form>
+    <div class="footer">
+      Already have an account? <a href="/login">Login here</a>
+    </div>
+  </div>
+
+  <script>
+    function togglePin() {
+      var role = document.getElementById('role').value;
+      var pinDiv = document.getElementById('pin-container');
+      var pinInput = document.getElementById('pin');
+      if (role === 'student') {
+        pinDiv.style.display = 'block';
+        pinInput.required = true;
+      } else {
+        pinDiv.style.display = 'none';
+        pinInput.value = '';
+        pinInput.required = false;
+      }
+    }
+    document.getElementById('role').addEventListener('change', togglePin);
+    document.addEventListener('DOMContentLoaded', togglePin);
+  </script>
+</body>
+</html>

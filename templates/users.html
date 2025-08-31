@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registered Users</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f6f8fc, #e0eafc);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+      padding: 40px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+    }
+
+    td.password-hash {
+      word-break: break-word;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    a {
+      display: inline-block;
+      margin-bottom: 20px;
+      background: #2c3e50;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    a:hover {
+      background: #34495e;
+    }
+
+    .side-img {
+      width: 45%;
+      background: url('https://lottie.host/96a87f25-9a37-4392-8889-6b58a2601d5e/mqJX8Zg2Lk.json') no-repeat center;
+      background-size: contain;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @media (max-width: 800px) {
+      body {
+        flex-direction: column;
+      }
+
+      .side-img {
+        width: 100%;
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Registered Users (Password Hash shown for info only)</h2>
+    <a href="{{ url_for('teacher_dashboard', teacher_name=session.user.name) }}">Back to Dashboard</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>PIN</th>
+          <th>Password Hash</th>
+          <th>Role</th>
+          <th>Last Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for id, name, email, pin, password, role, last_active in users %}
+        <tr>
+          <td>{{ id }}</td>
+          <td>{{ name }}</td>
+          <td>{{ email }}</td>
+          <td>{{ pin or '' }}</td>
+          <td class="password-hash">{{ password }}</td>
+          <td>{{ role }}</td>
+          <td>{{ last_active or 'N/A' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center;">No users found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="side-img"></div>
+</body>
+</html>

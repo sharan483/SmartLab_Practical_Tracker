@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>All Student Answers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Full screen setup */
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(120deg, #1e3c72, #2a5298, #4facfe, #00f2fe);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    /* Smooth animated gradient background */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Heading */
+    h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 25px;
+      font-weight: 600;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    }
+
+    /* Container for form and table */
+    #delete-form {
+      width: 95%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 25px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #delete-form:hover {
+      transform: scale(1.01);
+    }
+
+    /* Buttons and links */
+    button, a {
+      display: inline-block;
+      margin: 10px 10px 20px 0;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #ff4f81, #ff6f91);
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    button:hover, a:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    a {
+      background: linear-gradient(135deg, #00ffe7, #00c6ff);
+      color: #000;
+    }
+
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      word-wrap: break-word;
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.15);
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Checkbox styling */
+    input[type="checkbox"] {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>All Student Answers</h2>
+  <form id="delete-form" onsubmit="return false;">
+    <button id="delete-selected" type="button">Delete Selected</button>
+    <a href="{{ url_for('download_all_answers') }}" target="_blank">Download All as PDF</a>
+    <a href="{{ url_for('teacher_dashboard', teacher_name=session.user.name) }}">Back to Dashboard</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="select-all"></th>
+          <th>Name</th>
+          <th>PIN</th>
+          <th>Email</th>
+          <th>Question</th>
+          <th>Answer</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for id, name, pin, email, question, answer, timestamp in answers %}
+        <tr>
+          <td><input type="checkbox" class="answer-checkbox" value="{{ id }}"></td>
+          <td>{{ name }}</td>
+          <td>{{ pin }}</td>
+          <td>{{ email }}</td>
+          <td>{{ question }}</td>
+          <td>{{ answer }}</td>
+          <td>{{ timestamp }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" style="text-align:center;">No answers found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+
+  <script>
+    // Select / Deselect all checkboxes
+    document.getElementById('select-all').onclick = function () {
+      var cbs = document.getElementsByClassName('answer-checkbox');
+      for (var i = 0; i < cbs.length; i++) {
+        cbs[i].checked = this.checked;
+      }
+    };
+
+    // Delete selected answers
+    document.getElementById('delete-selected').onclick = function () {
+      var checked = Array.from(document.querySelectorAll('.answer-checkbox:checked')).map(cb => cb.value);
+      if (checked.length === 0) {
+        alert('Select at least one answer to delete.');
+        return;
+      }
+      if (!confirm('Delete ' + checked.length + ' selected answers?')) return;
+
+      fetch('/bulk_delete_answers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answer_ids: checked })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) location.reload();
+        else alert('Delete failed: ' + (data.error || 'Unknown'));
+      });
+    };
+  </script>
+</body>
+</html>

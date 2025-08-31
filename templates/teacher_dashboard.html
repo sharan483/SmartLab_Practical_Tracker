@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teacher Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+
+    /* Floating Background Shapes */
+    body::before,
+    body::after {
+      content: "";
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      background: url('https://cdn-icons-png.flaticon.com/512/1828/1828884.png') no-repeat center/contain;
+      opacity: 0.06;
+      animation: float 10s ease-in-out infinite;
+      z-index: 0;
+    }
+    body::before {
+      top: 8%;
+      left: -60px;
+    }
+    body::after {
+      bottom: 8%;
+      right: -60px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(25px); }
+    }
+
+    /* Dashboard Container */
+    .container {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+      padding: 35px;
+      max-width: 1100px;
+      width: 100%;
+      min-height: 90vh;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .top-bar h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Logout Button */
+    .logout {
+      background: #ff4d6d;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 5px 18px rgba(255, 77, 109, 0.6);
+      transition: 0.3s ease;
+    }
+
+    .logout:hover {
+      background: #ff1f56;
+      transform: scale(1.05);
+    }
+
+    /* Top Actions */
+    .top-actions {
+      display: flex;
+      justify-content: flex-start;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .top-actions a {
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 5px 20px rgba(54, 209, 220, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .top-actions a:hover {
+      transform: scale(1.07);
+      box-shadow: 0 6px 25px rgba(54, 209, 220, 0.7);
+    }
+
+    /* Form Section */
+    form {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #fff;
+      color: #333;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    select:focus, textarea:focus {
+      box-shadow: 0 0 12px rgba(54, 209, 220, 0.8);
+    }
+
+    /* Submit Button */
+    button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 6px 22px rgba(54, 209, 220, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 26px rgba(54, 209, 220, 0.7);
+    }
+
+    /* Assigned Experiments List */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+
+    li {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 16px 20px;
+      margin-bottom: 15px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      font-size: 15px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease;
+    }
+
+    li:hover {
+      transform: translateY(-4px);
+    }
+
+    li div:first-child {
+      max-width: 75%;
+      overflow-wrap: break-word;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .top-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .container {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <h2>Welcome, {{ teacher_name }}</h2>
+      <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </div>
+
+    <div class="top-actions">
+      <a href="{{ url_for('view_all_answers') }}">View All Answers</a>
+      <a href="{{ url_for('users') }}">View Users</a>
+    </div>
+
+    <h3>Assign Experiment</h3>
+    <form action="{{ url_for('assign_experiment') }}" method="POST">
+      <label for="student">Select Student (by PIN)</label>
+      <select name="student_email" id="student" required>
+        {% if students %}
+          {% for pin, email in students %}
+            <option value="{{ email }}">{{ pin }} - {{ email }}</option>
+          {% endfor %}
+        {% else %}
+          <option disabled>No students registered</option>
+        {% endif %}
+      </select>
+
+      <label for="experiment">Experiment / Question</label>
+      <textarea name="experiment" id="experiment" rows="4" placeholder="Enter experiment or question" required></textarea>
+
+      <button type="submit">Assign</button>
+    </form>
+
+    <h3>Current Assigned Experiments</h3>
+    <ul>
+      {% if assigned_questions %}
+        {% for id, student_email, question in assigned_questions %}
+          <li>
+            <div><strong>{{ student_email }}</strong>: {{ question }}</div>
+          </li>
+        {% endfor %}
+      {% else %}
+        <li>No experiments assigned yet</li>
+      {% endif %}
+    </ul>
+  </div>
+</body>
+</html>

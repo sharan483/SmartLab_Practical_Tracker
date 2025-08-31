@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - SmartLab Practical Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Full page background with smooth animated gradient */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(115deg, #2952ff 0%, #6de0ff 100%);
+      background-size: 200% 200%;
+      animation: gradientMove 8s ease-in-out infinite;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Centered login container */
+    .login-container {
+      background-color: white;
+      max-width: 380px;
+      width: 100%;
+      padding: 40px 35px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(41, 82, 255, 0.2);
+      text-align: center;
+      animation: fadeInScale 0.7s ease forwards;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    h2 {
+      color: #1d3577;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 18px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 18px;
+      text-align: left;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      padding: 12px 14px;
+      margin-top: 8px;
+      border: 1.8px solid #c2d1ff;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      outline-offset: 2px;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      border-color: #2952ff;
+      box-shadow: 0 0 8px #678cff88;
+      outline: none;
+    }
+
+    button {
+      margin-top: 30px;
+      background: linear-gradient(45deg, #2952ff, #6de0ff);
+      color: white;
+      font-weight: 700;
+      padding: 14px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(13, 56, 255, 0.4);
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #1a3ec9, #43beff);
+      box-shadow: 0 8px 16px rgba(13, 56, 255, 0.6);
+    }
+
+    /* Initially hidden containers for conditional fields */
+    #pin-container,
+    #name-container {
+      display: none;
+    }
+
+    /* Footer text styling */
+    .footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .footer a {
+      color: #2952ff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #1a3ec9;
+      text-decoration: underline;
+    }
+  </style>
+  <script>
+    function toggleFields() {
+      const role = document.getElementById('role').value;
+
+      const pinContainer = document.getElementById('pin-container');
+      const nameContainer = document.getElementById('name-container');
+
+      const pinInput = document.getElementById('pin');
+      const nameInput = document.getElementById('name');
+
+      if (role === 'student') {
+        pinContainer.style.display = 'block';
+        nameContainer.style.display = 'none';
+
+        pinInput.required = true;
+        nameInput.required = false;
+
+        nameInput.value = '';
+      } else if (role === 'teacher') {
+        pinContainer.style.display = 'none';
+        nameContainer.style.display = 'block';
+
+        pinInput.required = false;
+        nameInput.required = true;
+
+        pinInput.value = '';
+      } else {
+        pinContainer.style.display = 'none';
+        nameContainer.style.display = 'none';
+
+        pinInput.required = false;
+        nameInput.required = false;
+
+        pinInput.value = '';
+        nameInput.value = '';
+      }
+    }
+
+    window.onload = function () {
+      toggleFields();
+      document.getElementById('role').addEventListener('change', toggleFields);
+    };
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form method="POST" action="{{ url_for('login') }}">
+      <label for="role">Role</label>
+      <select id="role" name="role" required>
+        <option value="" disabled selected>Select your role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+
+      <div id="pin-container">
+        <label for="pin">PIN (Students only)</label>
+        <input type="text" id="pin" name="pin" />
+      </div>
+
+      <div id="name-container">
+        <label for="name">Name (Teachers only)</label>
+        <input type="text" id="name" name="name" />
+      </div>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="footer">
+      Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+    </div>
+  </div>
+</body>
+</html>

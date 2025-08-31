@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login History - SmartLab</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            margin: 0;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fbfd;
+        }
+
+        tr:hover {
+            background-color: #e0f0ff;
+        }
+
+        td:empty {
+            color: #999;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 500;
+            margin-right: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-links {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 20px;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 12px;
+            }
+
+            td {
+                border: none;
+                padding: 10px 15px;
+                position: relative;
+                text-align: left;
+            }
+
+            td:before {
+                content: attr(data-label);
+                font-weight: bold;
+                position: absolute;
+                left: 15px;
+                top: 10px;
+                color: #555;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login History</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>User Email</th>
+                    <th>Login Time</th>
+                    <th>IP Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for login in logins %}
+                <tr>
+                    <td data-label="User Email">{{ login[0] }}</td>
+                    <td data-label="Login Time">{{ login[1] }}</td>
+                    <td data-label="IP Address">{{ login[2] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align:center;">No login history available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="nav-links">
+            <a href="/teacher_dashboard/{{ session['user']['name'] }}">Back to Dashboard</a>
+            |
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
