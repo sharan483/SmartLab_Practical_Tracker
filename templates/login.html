@@ -6,178 +6,148 @@
   <title>Login - SmartLab Practical Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* Full page background with smooth animated gradient */
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(115deg, #2952ff 0%, #6de0ff 100%);
-      background-size: 200% 200%;
-      animation: gradientMove 8s ease-in-out infinite;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(120deg, #1e3c72, #2a5298, #4facfe, #00f2fe);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+      color: #222;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 40px 12px;
+      overflow-x: hidden;
     }
-
     @keyframes gradientMove {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
-
-    /* Centered login container */
     .login-container {
-      background-color: white;
+      background: rgba(255,255,255,0.13);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(30,64,175,0.10);
+      padding: 44px 38px 34px 38px;
       max-width: 380px;
-      width: 100%;
-      padding: 40px 35px;
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(41, 82, 255, 0.2);
-      text-align: center;
-      animation: fadeInScale 0.7s ease forwards;
+      width: 95%;
+      margin: 20px auto;
+      animation: fadeIn 0.8s cubic-bezier(.39,.58,.57,1) forwards;
+      backdrop-filter: blur(15px);
     }
-
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.97);}
+      to {opacity: 1; transform: scale(1);}
     }
-
     h2 {
-      color: #1d3577;
+      color: #1e40af;
+      text-align: center;
       font-weight: 700;
-      font-size: 2rem;
-      margin-bottom: 18px;
+      letter-spacing: 1px;
+      margin-bottom: 22px;
+      text-shadow: 1px 2px 10px rgba(0,0,0,0.12);
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      margin-top: 10px;
-    }
-
     label {
       font-weight: 600;
-      margin-top: 18px;
-      text-align: left;
-      color: #333;
-      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 8px;
+      margin-top: 16px;
+      color: #334066;
+      letter-spacing: 0.1px;
     }
-
-    input[type="text"],
-    input[type="password"],
-    select {
-      padding: 12px 14px;
-      margin-top: 8px;
-      border: 1.8px solid #c2d1ff;
+    select, input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 13px;
+      border: 1.5px solid #c2d1ff;
       border-radius: 10px;
+      background: #f9fafb;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
-      outline-offset: 2px;
+      margin-bottom: 4px;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
-
-    input[type="text"]:focus,
-    input[type="password"]:focus,
-    select:focus {
+    select:focus, input:focus {
       border-color: #2952ff;
-      box-shadow: 0 0 8px #678cff88;
+      box-shadow: 0 0 9px #678cff66;
       outline: none;
     }
-
-    button {
-      margin-top: 30px;
-      background: linear-gradient(45deg, #2952ff, #6de0ff);
+    button[type="submit"] {
+      width: 100%;
+      background: linear-gradient(135deg, #2952ff, #6de0ff);
       color: white;
-      font-weight: 700;
-      padding: 14px;
-      font-size: 1.1rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
+      padding: 14px 0;
+      font-weight: 700;
+      font-size: 1.1em;
       cursor: pointer;
-      box-shadow: 0 6px 12px rgba(13, 56, 255, 0.4);
-      transition: background 0.4s ease, box-shadow 0.4s ease;
+      margin-top: 22px;
+      box-shadow: 0 4px 16px rgba(41,82,255,0.19);
+      transition: background 0.3s, box-shadow 0.2s, transform 0.2s;
     }
-
-    button:hover {
-      background: linear-gradient(45deg, #1a3ec9, #43beff);
-      box-shadow: 0 8px 16px rgba(13, 56, 255, 0.6);
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg, #1a3ec9, #43beff);
+      transform: scale(1.03);
     }
-
-    /* Initially hidden containers for conditional fields */
-    #pin-container,
-    #name-container {
-      display: none;
-    }
-
-    /* Footer text styling */
     .footer {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      color: #555;
+      text-align: center;
+      margin-top: 24px;
+      color: #274289;
+      font-size: 1em;
     }
-
     .footer a {
-      color: #2952ff;
-      font-weight: 600;
+      color: #2060ed;
       text-decoration: none;
-      transition: color 0.3s ease;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .footer a:hover {
+      color: #1031a2;
+      text-decoration: underline;
     }
 
-    .footer a:hover {
-      color: #1a3ec9;
-      text-decoration: underline;
+    /* Error message styling */
+    .error-message {
+      background: #ffe3e3;
+      color: #cc0000;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 1.5px solid #cc0000;
+      text-align: center;
+      box-shadow: 0 4px 12px #cc000033;
     }
   </style>
   <script>
     function toggleFields() {
       const role = document.getElementById('role').value;
-
       const pinContainer = document.getElementById('pin-container');
       const nameContainer = document.getElementById('name-container');
-
       const pinInput = document.getElementById('pin');
       const nameInput = document.getElementById('name');
-
       if (role === 'student') {
         pinContainer.style.display = 'block';
         nameContainer.style.display = 'none';
-
         pinInput.required = true;
         nameInput.required = false;
-
         nameInput.value = '';
       } else if (role === 'teacher') {
         pinContainer.style.display = 'none';
         nameContainer.style.display = 'block';
-
         pinInput.required = false;
         nameInput.required = true;
-
         pinInput.value = '';
       } else {
         pinContainer.style.display = 'none';
         nameContainer.style.display = 'none';
-
         pinInput.required = false;
         nameInput.required = false;
-
         pinInput.value = '';
         nameInput.value = '';
       }
     }
-
     window.onload = function () {
       toggleFields();
       document.getElementById('role').addEventListener('change', toggleFields);
@@ -187,6 +157,11 @@
 <body>
   <div class="login-container">
     <h2>Login</h2>
+
+    {% if error %}
+      <div class="error-message">{{ error }}</div>
+    {% endif %}
+
     <form method="POST" action="{{ url_for('login') }}">
       <label for="role">Role</label>
       <select id="role" name="role" required>
@@ -194,26 +169,55 @@
         <option value="student">Student</option>
         <option value="teacher">Teacher</option>
       </select>
-
       <div id="pin-container">
         <label for="pin">PIN (Students only)</label>
         <input type="text" id="pin" name="pin" />
       </div>
-
       <div id="name-container">
         <label for="name">Name (Teachers only)</label>
         <input type="text" id="name" name="name" />
       </div>
-
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" required />
-
+      <div style="position: relative; width: fit-content;">
+        <input type="password" id="password" name="password" required style="padding-right: 36px;" />
+        <span id="togglePassword" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer; user-select: none;">
+          <!-- Eye icon (default) -->
+          <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <!-- Eye slash icon (hidden) -->
+          <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:none;">
+            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.08 21.08 0 0 1 5.6-7.6"/>
+            <path d="M1 1l22 22"/>
+            <path d="M14.12 14.12a3 3 0 0 1-4.24-4.24"/>
+            <path d="M9.88 5.58a10.06 10.06 0 0 1 8.1 3.48"/>
+          </svg>
+        </span>
+      </div>
       <button type="submit">Login</button>
     </form>
-
     <div class="footer">
       Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
     </div>
   </div>
+  <script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+
+    togglePassword.addEventListener('click', function () {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'inline';
+      } else {
+        passwordInput.type = 'password';
+        eyeOpen.style.display = 'inline';
+        eyeClosed.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
