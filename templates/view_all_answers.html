@@ -3,137 +3,127 @@
 <head>
   <meta charset="UTF-8"/>
   <title>All Student Answers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
-    /* Reset default styles */
-    * {
+    body {
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background-size: 200% 200%;
+      animation: gradientMove 15s ease infinite;
+      color: #222;
+      padding: 28px 14px;
       box-sizing: border-box;
     }
-
-    /* Full screen setup */
-    html, body {
-      height: 100%;
-      width: 100%;
-      font-family: 'Poppins', sans-serif;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: linear-gradient(120deg, #1e3c72, #2a5298, #4facfe, #00f2fe);
-      background-size: 400% 400%;
-      animation: gradientBG 12s ease infinite;
-      overflow-x: hidden;
-      padding: 20px;
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
-
-    /* Smooth animated gradient background */
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Heading */
     h2 {
       text-align: center;
-      font-size: 32px;
-      margin-bottom: 25px;
-      font-weight: 600;
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+      color: #10316b;
+      font-weight: 700;
+      margin-bottom: 26px;
+      font-size: 2rem;
+      text-shadow: 1px 1px 7px rgba(16,49,107,0.16);
     }
-
-    /* Container for form and table */
-    #delete-form {
-      width: 95%;
-      max-width: 1200px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 25px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
+    form {
+      max-width: 1100px;
+      margin: 0 auto 32px auto;
+      background: rgba(255,255,255,0.16);
+      padding: 26px 28px 32px 28px;
+      border-radius: 20px;
+      box-shadow: 0 12px 38px rgba(16,49,107,0.12);
+      backdrop-filter: blur(18px);
+      box-sizing: border-box;
     }
-
-    #delete-form:hover {
-      transform: scale(1.01);
-    }
-
-    /* Buttons and links */
-    button, a {
-      display: inline-block;
-      margin: 10px 10px 20px 0;
-      padding: 12px 24px;
-      background: linear-gradient(135deg, #ff4f81, #ff6f91);
+    #delete-selected {
+      background: #2952ff;
       color: white;
-      text-decoration: none;
       border: none;
-      border-radius: 8px;
-      font-weight: 600;
+      padding: 11px 26px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 15px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      margin-right: 20px;
+      box-shadow: 0 5px 18px rgba(41,82,255,0.22);
+      transition: background 0.3s ease, transform 0.2s ease;
     }
-
-    button:hover, a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    #delete-selected:hover {
+      background: #1a33b3;
+      transform: scale(1.06);
     }
-
     a {
-      background: linear-gradient(135deg, #00ffe7, #00c6ff);
-      color: #000;
+      color: #10316b;
+      font-weight: 600;
+      text-decoration: none;
+      margin-right: 20px;
+      padding: 10px 16px;
+      border-radius: 16px;
+      background: rgba(16, 49, 107, 0.1);
+      box-shadow: 0 3px 10px rgba(16,49,107,0.07);
+      transition: background 0.3s ease, color 0.3s ease;
     }
-
-    /* Table styles */
+    a:hover {
+      background: #10316b;
+      color: white;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
+      border-radius: 18px;
       overflow: hidden;
-      backdrop-filter: blur(10px);
-      margin-top: 15px;
+      box-shadow: 0 9px 34px rgba(16,49,107,0.15);
+      background: rgba(255,255,255,0.25);
     }
-
-    th, td {
-      padding: 14px;
+    thead tr {
+      background: #2952ff;
+      color: white;
+      font-weight: 700;
+      font-size: 1.05rem;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      word-wrap: break-word;
+      user-select: none;
     }
-
-    th {
-      background-color: rgba(255, 255, 255, 0.15);
-      font-weight: 600;
-      font-size: 16px;
+    thead th, tbody td {
+      padding: 12px 18px;
     }
-
-    td {
-      font-size: 14px;
+    tbody tr:nth-child(even) {
+      background: rgba(41, 82, 255, 0.08);
     }
-
-    tr:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      transition: background-color 0.3s ease;
-    }
-
-    /* Checkbox styling */
-    input[type="checkbox"] {
-      transform: scale(1.3);
+    tbody tr:hover {
+      background: rgba(41, 82, 255, 0.18);
       cursor: pointer;
     }
-
-    /* Responsive design */
+    tbody td {
+      font-size: 0.95rem;
+      vertical-align: top;
+      color: #1a2c52;
+      word-break: break-word;
+    }
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
     @media (max-width: 768px) {
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+      form {
+        padding: 18px 14px 20px 14px;
       }
-      th, td {
-        padding: 10px;
+      thead tr {
+        font-size: 0.9rem;
+      }
+      tbody td {
+        font-size: 0.85rem;
+      }
+      #delete-selected, a {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        display: inline-block;
       }
     }
   </style>
@@ -178,7 +168,6 @@
   </form>
 
   <script>
-    // Select / Deselect all checkboxes
     document.getElementById('select-all').onclick = function () {
       var cbs = document.getElementsByClassName('answer-checkbox');
       for (var i = 0; i < cbs.length; i++) {
@@ -186,7 +175,6 @@
       }
     };
 
-    // Delete selected answers
     document.getElementById('delete-selected').onclick = function () {
       var checked = Array.from(document.querySelectorAll('.answer-checkbox:checked')).map(cb => cb.value);
       if (checked.length === 0) {
