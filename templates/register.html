@@ -6,145 +6,135 @@
   <title>Register - Smart Lab Practical Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* Full page background with smooth animated gradient */
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(115deg, #2952ff 0%, #6de0ff 100%);
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(115deg,#2952ff 0,#6de0ff 100%);
       background-size: 200% 200%;
-      animation: gradientMove 8s ease-in-out infinite;
-      font-family: 'Poppins', sans-serif;
+      animation: gradientMove 12s ease-in-out infinite;
+      color: #222;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      color: #333;
+      padding: 32px 6px;
+      overflow-x: hidden;
     }
-
     @keyframes gradientMove {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
-
-    /* Centered registration container */
     .register-container {
       width: 420px;
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(41, 82, 255, 0.2);
-      padding: 35px 40px;
-      animation: fadeInScale 0.7s ease forwards;
+      background-color: rgba(255,255,255,0.13);
+      border-radius: 18px;
+      box-shadow: 0 14px 36px rgba(41, 82, 255, 0.12);
+      padding: 38px 40px 32px 40px;
+      animation: fadeInScale 0.7s cubic-bezier(.39,.58,.57,1) forwards;
       box-sizing: border-box;
+      backdrop-filter: blur(16px);
+      margin: 20px 0;
+      max-width: 96vw;
     }
-
     @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      0% {opacity: 0; transform: scale(0.95);}
+      100% {opacity: 1; transform: scale(1);}
     }
-
     h2 {
-      margin: 0 0 20px 0;
-      text-align: center;
-      color: #1d3577;
-      font-weight: 700;
       font-size: 2rem;
+      color: #1e40af;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+      text-shadow: 1px 2px 10px rgba(0,0,0,0.10);
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-
     label {
-      margin-top: 15px;
       font-weight: 600;
-      color: #333;
-      font-size: 0.95rem;
-      text-align: left;
+      margin-bottom: 7px;
+      margin-top: 16px;
+      color: #334066;
+      display: block;
+      letter-spacing: 0.1px;
     }
-
-    input, select {
-      padding: 12px 14px;
-      margin-top: 8px;
-      border: 1.8px solid #c2d1ff;
-      border-radius: 10px;
-      background: #f9fafb;
+    select, input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 13px;
+      border-radius: 11px;
+      border: 1.5px solid #bfd9ff;
       font-size: 1rem;
-      outline-offset: 2px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background: #f9fbfd;
+      margin-bottom: 4px;
+      transition: border-color 0.3s, box-shadow 0.3s;
       box-sizing: border-box;
     }
-
-    input:focus, select:focus {
+    select:focus, input:focus {
       border-color: #2952ff;
-      box-shadow: 0 0 8px #678cff88;
+      box-shadow: 0 0 8px #678cff66;
       outline: none;
     }
-
-    input::placeholder {
-      color: #888;
-    }
-
-    button {
-      margin-top: 30px;
-      background: linear-gradient(45deg, #2952ff, #6de0ff);
-      color: white;
-      font-weight: 700;
-      padding: 14px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 6px 12px rgba(13, 56, 255, 0.4);
-      transition: background 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    button:hover {
-      background: linear-gradient(45deg, #1a3ec9, #43beff);
-      box-shadow: 0 8px 16px rgba(13, 56, 255, 0.6);
-    }
-
-    /* Initially hidden PIN container */
     #pin-container {
       display: none;
     }
-
-    .footer {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      text-align: center;
-      color: #555;
+    button[type="submit"] {
+      width: 100%;
+      background: linear-gradient(135deg, #2952ff, #6de0ff);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 0;
+      font-weight: 700;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin-top: 26px;
+      box-shadow: 0 7px 18px rgba(41,82,255,0.15);
+      transition: background 0.32s, transform 0.18s;
     }
-
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg,#1a3ec9,#43beff);
+      transform: scale(1.03);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 28px;
+      color: #274289;
+      font-size: 1em;
+    }
     .footer a {
-      color: #2952ff;
+      color: #2060ed;
       font-weight: 600;
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: color 0.22s;
+    }
+    .footer a:hover {
+      color: #1031a2;
+      text-decoration: underline;
     }
 
-    .footer a:hover {
-      color: #1a3ec9;
-      text-decoration: underline;
+    /* Success message styling */
+    .success-message {
+      background: #d1fae5;
+      color: #065f46;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 20px;
+      margin-bottom: 18px;
+      border-radius: 9px;
+      border: 1.5px solid #10b981;
+      text-align: center;
+      box-shadow: 0 4px 14px #10b98144;
     }
   </style>
 </head>
 <body>
   <div class="register-container">
     <h2>Register</h2>
+
+    {% if success %}
+      <div class="success-message">{{ success }}</div>
+    {% endif %}
+
     <form action="/register" method="POST">
       <label for="role">Role</label>
       <select name="role" id="role" required>
@@ -165,7 +155,23 @@
       </div>
 
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" required placeholder="Create password" />
+      <div style="position: relative; width: fit-content;">
+        <input type="password" id="password" name="password" required style="padding-right: 36px;" />
+        <span id="togglePassword" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer; user-select: none;">
+          <!-- Eye icon (default) -->
+          <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <!-- Eye slash icon (hidden) -->
+          <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:none;">
+            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.08 21.08 0 0 1 5.6-7.6"/>
+            <path d="M1 1l22 22"/>
+            <path d="M14.12 14.12a3 3 0 0 1-4.24-4.24"/>
+            <path d="M9.88 5.58a10.06 10.06 0 0 1 8.1 3.48"/>
+          </svg>
+        </span>
+      </div>
 
       <button type="submit">Register</button>
     </form>
@@ -173,7 +179,6 @@
       Already have an account? <a href="/login">Login here</a>
     </div>
   </div>
-
   <script>
     function togglePin() {
       var role = document.getElementById('role').value;
@@ -190,6 +195,23 @@
     }
     document.getElementById('role').addEventListener('change', togglePin);
     document.addEventListener('DOMContentLoaded', togglePin);
+
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+
+    togglePassword.addEventListener('click', function () {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'inline';
+      } else {
+        passwordInput.type = 'password';
+        eyeOpen.style.display = 'inline';
+        eyeClosed.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
