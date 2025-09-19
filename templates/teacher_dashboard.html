@@ -3,226 +3,167 @@
 <head>
   <meta charset="UTF-8" />
   <title>Teacher Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Body Styling */
     body {
       margin: 0;
-      padding: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: #fff;
       min-height: 100vh;
+      font-family: 'Poppins', Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background-size: 200% 200%;
+      animation: gradientMove 15s ease infinite;
+      color: #152b44;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 40px 20px;
+      padding: 28px 14px;
       overflow-x: hidden;
     }
-
-    /* Floating Background Shapes */
-    body::before,
-    body::after {
-      content: "";
-      position: absolute;
-      width: 350px;
-      height: 350px;
-      background: url('https://cdn-icons-png.flaticon.com/512/1828/1828884.png') no-repeat center/contain;
-      opacity: 0.06;
-      animation: float 10s ease-in-out infinite;
-      z-index: 0;
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
-    body::before {
-      top: 8%;
-      left: -60px;
-    }
-    body::after {
-      bottom: 8%;
-      right: -60px;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(25px); }
-    }
-
-    /* Dashboard Container */
     .container {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(18px);
       border-radius: 20px;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
-      padding: 35px;
-      max-width: 1100px;
-      width: 100%;
-      min-height: 90vh;
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
+      box-shadow: 0 10px 34px rgba(9, 70, 236, 0.13);
+      padding: 36px 40px 32px 40px;
+      max-width: 700px;
+      width: 95%;
+      box-sizing: border-box;
+      animation: fadeInUp 0.8s cubic-bezier(.39,.58,.57,1) forwards;
     }
-
-    /* Top Bar */
+    @keyframes fadeInUp {
+      0% {opacity: 0; transform: translateY(20px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
       margin-bottom: 20px;
     }
-
     .top-bar h2 {
-      font-size: 1.8rem;
+      margin: 0;
       font-weight: 700;
-      color: #fff;
+      font-size: 1.9rem;
+      color: #10316b;
+      text-shadow: 1px 1px 8px rgba(16,49,107,0.15);
     }
-
-    /* Logout Button */
     .logout {
-      background: #ff4d6d;
-      color: #fff;
-      padding: 12px 22px;
-      border-radius: 10px;
+      background: #10316b;
+      color: white;
+      padding: 9px 20px;
+      border-radius: 12px;
       text-decoration: none;
       font-weight: 600;
-      box-shadow: 0 5px 18px rgba(255, 77, 109, 0.6);
-      transition: 0.3s ease;
+      transition: background-color 0.25s ease;
     }
-
     .logout:hover {
-      background: #ff1f56;
-      transform: scale(1.05);
+      background: #0c2350;
     }
-
-    /* Top Actions */
     .top-actions {
-      display: flex;
-      justify-content: flex-start;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
-
     .top-actions a {
-      background: linear-gradient(135deg, #43e97b, #38f9d7);
-      padding: 12px 20px;
-      border-radius: 10px;
-      color: #fff;
+      margin-right: 22px;
+      color: #1e3b70;
       font-weight: 600;
       text-decoration: none;
-      box-shadow: 0 5px 20px rgba(54, 209, 220, 0.5);
-      transition: all 0.3s ease;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.09);
+      transition: background 0.3s ease, color 0.3s ease;
     }
-
     .top-actions a:hover {
-      transform: scale(1.07);
-      box-shadow: 0 6px 25px rgba(54, 209, 220, 0.7);
-    }
-
-    /* Form Section */
-    form {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-    }
-
-    label {
-      font-weight: 600;
-      display: block;
-      margin-bottom: 8px;
+      background: #10316b;
       color: #fff;
     }
-
+    h3 {
+      font-weight: 700;
+      margin-top: 24px;
+      margin-bottom: 8px;
+      color: #124073;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 16px;
+      color: #254273;
+    }
     select, textarea {
       width: 100%;
       padding: 14px;
-      margin-bottom: 15px;
-      font-size: 15px;
-      border: none;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.4;
+      border: 1.8px solid #9ac9ff;
       border-radius: 12px;
-      background: #fff;
-      color: #333;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      outline: none;
-      transition: box-shadow 0.3s ease;
+      resize: vertical;
+      background: #f7fbff;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
-
     select:focus, textarea:focus {
-      box-shadow: 0 0 12px rgba(54, 209, 220, 0.8);
+      border-color: #2859e6;
+      outline: none;
+      box-shadow: 0 0 12px #5f82ff88;
     }
-
-    /* Submit Button */
-    button {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff;
-      padding: 12px 28px;
-      font-size: 16px;
+    button[type="submit"] {
+      margin-top: 24px;
+      background: linear-gradient(135deg,#2962ff 0%,#82b1ff 100%);
+      color: white;
+      font-weight: 700;
+      font-size: 1.1em;
       border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 6px 22px rgba(54, 209, 220, 0.5);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    button:hover {
-      transform: scale(1.07);
-      box-shadow: 0 8px 26px rgba(54, 209, 220, 0.7);
-    }
-
-    /* Assigned Experiments List */
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 10px;
-    }
-
-    li {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 16px 20px;
-      margin-bottom: 15px;
+      padding: 13px 0;
       border-radius: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #fff;
-      font-size: 15px;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
-      transition: transform 0.3s ease;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 7px 20px rgba(41, 98, 255, 0.3);
+      transition: background 0.3s ease, transform 0.2s ease;
     }
-
-    li:hover {
-      transform: translateY(-4px);
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg,#003ecd 0%,#5a9aff 100%);
+      transform: scale(1.05);
     }
-
-    li div:first-child {
-      max-width: 75%;
-      overflow-wrap: break-word;
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin-top: 12px;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+    ul li {
+      background: rgba(255,255,255,0.25);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      font-weight: 500;
+      color: #1b2e56;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 26px 14px 20px 14px;
+      }
       .top-bar {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
       }
-      .top-actions {
-        flex-direction: column;
-        align-items: stretch;
+      .logout {
+        margin-top: 14px;
+        width: 100%;
+        text-align: center;
       }
-      .container {
-        padding: 25px;
+      .top-actions a {
+        display: inline-block;
+        margin: 8px 10px 10px 0;
+        width: calc(50% - 6px);
+        text-align: center;
       }
     }
   </style>
