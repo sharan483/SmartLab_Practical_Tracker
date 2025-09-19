@@ -8,10 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from fpdf import FPDF
 import io
 
-app = Flask(__name__)
-app.secret_key = 'your_secure_secret_key_here'  # Replace with a strong secret key in production
+app = Flask(_name_)
+app.secret_key = 'your_secure_secret_key_here'  # Change this in production!
 
-
+# ---- Database Setup ----
 def init_db():
     conn = sqlite3.connect('database.db', check_same_thread=False)
     cursor = conn.cursor()
@@ -56,7 +56,7 @@ def init_db():
 
 init_db()
 
-
+# ---- Update last_active for students ----
 @app.before_request
 def update_last_active():
     if 'user' in session and session['user']['role'] == 'student':
@@ -67,12 +67,12 @@ def update_last_active():
         conn.commit()
         conn.close()
 
-
+# ---- Home ----
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
+# ---- Register ----
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -104,6 +104,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html')
 
+# ---- Login ----
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -136,7 +137,7 @@ def login():
                     conn.close()
                     return redirect(url_for('student_dashboard'))
                 else:
-                    error = "Invalid credentials. Please check your entered name/PIN and password."
+                    error = "Invalid credentials."
 
         elif role == 'teacher':
             name = request.form.get('name', '').strip()
@@ -163,20 +164,19 @@ def login():
                     conn.close()
                     return redirect(url_for('teacher_dashboard', teacher_name=user[1]))
                 else:
-                    error = "Invalid credentials. Please check your entered name/PIN and password."
+                    error = "Invalid credentials."
         else:
             error = "Please select a valid role."
 
     return render_template('login.html', error=error)
 
-
-
+# ---- Logout ----
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
-
+# ---- Student Dashboard: Only show latest unanswered question ----
 @app.route('/student_dashboard')
 def student_dashboard():
     if 'user' not in session or session['user']['role'] != 'student':
@@ -184,23 +184,24 @@ def student_dashboard():
     email = session['user']['email']
     conn = sqlite3.connect('database.db', check_same_thread=False)
     cur = conn.cursor()
-    cur.execute("SELECT id, question FROM questions WHERE student_email=? ORDER BY id DESC LIMIT 1", (email,))
+    # Find latest question assigned to student NOT answered yet
+    cur.execute("""
+        SELECT q.id, q.question
+        FROM questions q
+        LEFT JOIN answers a ON q.id = a.question_id AND a.student_email = ?
+        WHERE q.student_email = ? AND a.id IS NULL
+        ORDER BY q.id DESC LIMIT 1
+    """, (email, email))
     question = cur.fetchone()
-    answer_text = ''
-    if question:
-        cur.execute("SELECT answer_text FROM answers WHERE student_email=? AND question_id=? ORDER BY id DESC LIMIT 1", (email, question[0]))
-        ans = cur.fetchone()
-        answer_text = ans[0] if ans else ''
     conn.close()
     submitted = request.args.get('submitted') == '1'
-    return render_template('student_dashboard.html', 
-                           name=session['user']['name'], 
-                           pin=session['user']['pin'], 
-                           question=question, 
-                           answer=answer_text, 
-                           submitted=submitted)
+    return render_template('student_dashboard.html',
+                          name=session['user']['name'],
+                          pin=session['user']['pin'],
+                          question=question,
+                          submitted=submitted)
 
-
+# ---- Submit Answer: answering erases the question from dashboard ----
 @app.route('/submit_answer', methods=['POST'])
 def submit_answer():
     if 'user' not in session or session['user']['role'] != 'student':
@@ -213,14 +214,15 @@ def submit_answer():
     conn = sqlite3.connect('database.db', check_same_thread=False)
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO answers (student_email, question_id, answer_text, timestamp) VALUES (?, ?, ?, ?)", 
+        "INSERT INTO answers (student_email, question_id, answer_text, timestamp) VALUES (?, ?, ?, ?)",
         (email, question_id, answer_text, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     )
     conn.commit()
     conn.close()
+    # Redirect to dashboard; question disappears after answering
     return redirect(url_for('student_dashboard', submitted=1))
 
-
+# ---- Teacher Dashboard ----
 @app.route('/teacher_dashboard/<teacher_name>')
 def teacher_dashboard(teacher_name):
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -234,9 +236,10 @@ def teacher_dashboard(teacher_name):
     cur.execute("SELECT id, student_email, question FROM questions WHERE assigned_by=? ORDER BY id DESC", (teacher_name,))
     assigned_questions = cur.fetchall()
     conn.close()
-    return render_template('teacher_dashboard.html', teacher_name=teacher_name, students=students, assigned_questions=assigned_questions)
+    return render_template('teacher_dashboard.html',
+                          teacher_name=teacher_name, students=students, assigned_questions=assigned_questions)
 
-
+# ---- Teacher assigns new experiment/question ----
 @app.route('/assign_experiment', methods=['POST'])
 def assign_experiment():
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -248,13 +251,13 @@ def assign_experiment():
         return "All fields are required.", 400
     conn = sqlite3.connect('database.db', check_same_thread=False)
     cur = conn.cursor()
-    cur.execute("DELETE FROM questions WHERE student_email=? AND assigned_by=?", (student_email, teacher_name))
+    # Assigns a new question, old questions remain in history
     cur.execute("INSERT INTO questions (student_email, question, assigned_by) VALUES (?, ?, ?)", (student_email, experiment, teacher_name))
     conn.commit()
     conn.close()
     return redirect(url_for('teacher_dashboard', teacher_name=teacher_name))
 
-
+# ---- Teacher views answers of a specific student ----
 @app.route('/teacher_answers/<student_email>')
 def teacher_answers(student_email):
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -280,13 +283,12 @@ def teacher_answers(student_email):
     conn.close()
     return render_template('teacher_answers.html', student=student, answers=answers)
 
-
 def draw_separator(pdf):
     dash_width = pdf.get_string_width("-")
     max_dashes = max(5, int((pdf.w - pdf.l_margin - pdf.r_margin) / dash_width) - 1)
     pdf.cell(0, 7, "-" * max_dashes, 0, 1)
 
-
+# ---- Teacher downloads student answers as PDF ----
 @app.route('/download_student_answers/<student_email>')
 def download_student_answers(student_email):
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -342,7 +344,7 @@ def download_student_answers(student_email):
     filename = f"{student[0] if student else student_email}_answers.pdf"
     return send_file(buf, mimetype='application/pdf', as_attachment=True, download_name=filename)
 
-
+# ---- View all users (teacher only) ----
 @app.route('/users')
 def users():
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -354,7 +356,7 @@ def users():
     conn.close()
     return render_template('users.html', users=users)
 
-
+# ---- View all answers (teacher only) ----
 @app.route('/view_all_answers')
 def view_all_answers():
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -380,7 +382,7 @@ def view_all_answers():
     conn.close()
     return render_template('view_all_answers.html', answers=answers)
 
-
+# ---- Bulk delete answers (teacher only, ajax) ----
 @app.route('/bulk_delete_answers', methods=['POST'])
 def bulk_delete_answers():
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -396,7 +398,7 @@ def bulk_delete_answers():
     conn.close()
     return jsonify({"success": True})
 
-
+# ---- Download all answers for teacher as PDF ----
 @app.route('/download_all_answers')
 def download_all_answers():
     if 'user' not in session or session['user']['role'] != 'teacher':
@@ -444,13 +446,11 @@ def download_all_answers():
             pdf.multi_cell(0, 7, f"Answer: {answer_text or '(No answer)'}")
             pdf.set_font("Arial", 'I', 11)
             pdf.cell(0, 8, f"Submitted at: {timestamp}", 0, 1)
-            # Draw a horizontal line separator (never causes error)
             y = pdf.get_y()
             pdf.set_draw_color(160, 160, 160)
             pdf.line(pdf.l_margin, y, pdf.w - pdf.r_margin, y)
             pdf.ln(5)
 
-    # This block fixes the AttributeError -- handles both old and new FPDF versions
     pdf_output = pdf.output(dest='S')
     if isinstance(pdf_output, str):
         pdf_bytes = pdf_output.encode('latin1')
@@ -461,8 +461,7 @@ def download_all_answers():
     buf.seek(0)
     return send_file(buf, mimetype='application/pdf', as_attachment=True, download_name=f"{teacher_name}_all_answers.pdf")
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True)
-    
-    # pip install flask werkzeug fpdf
-# python app.py
+
+# Required extra: pip install flask werkzeug fpdf
